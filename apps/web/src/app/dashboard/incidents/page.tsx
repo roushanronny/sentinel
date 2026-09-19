@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
-import { API_URL, apiGet, loadSession, type SessionData } from '@/lib/api';
+import { apiGet, apiSend, loadSession, type SessionData } from '@/lib/api';
 
 interface IncidentRow {
   id: string;
@@ -13,23 +13,6 @@ interface IncidentRow {
   createdAt: string;
   service: { id: string; name: string } | null;
   _count: { events: number };
-}
-
-async function apiPost<T>(path: string, session: SessionData, body: unknown): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${session.accessToken}`,
-      'X-Organization-Id': session.organizationId,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-  const json = (await response.json()) as { data?: T; error?: { message?: string } };
-  if (!response.ok || json.data === undefined) {
-    throw new Error(json.error?.message ?? 'Request failed');
-  }
-  return json.data;
 }
 
 export default function IncidentsPage() {
@@ -58,7 +41,7 @@ export default function IncidentsPage() {
     setCreating(true);
     setError(null);
     try {
-      await apiPost('/incidents', session, {
+      await apiSend('POST', '/incidents', session, {
         title,
         severity: 'HIGH',
         description: 'Created from Sentinel dashboard',

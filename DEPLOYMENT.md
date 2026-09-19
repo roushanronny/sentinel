@@ -113,3 +113,7 @@ Built Sentinel, a multi-tenant API security and reliability platform (gateway, R
 - GitHub: https://github.com/roushanronny/sentinel
 - Live dashboard: https://sentinel-chi-plum.vercel.app
 - Live API: _(add after backend deploy on Azure/Render)_
+
+### Live login note
+
+Vercel hosts the **dashboard only**. If the control-plane API is unreachable (default `localhost:3001`), Sign in automatically opens **portfolio demo mode** with sample services / events / incidents so the live URL works for interviews.

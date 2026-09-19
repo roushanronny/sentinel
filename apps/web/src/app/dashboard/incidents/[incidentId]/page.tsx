@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { AppShell } from '@/components/AppShell';
-import { API_URL, apiGet, loadSession, type SessionData } from '@/lib/api';
+import { apiGet, apiSend, loadSession, type SessionData } from '@/lib/api';
 
 interface IncidentDetail {
   id: string;
@@ -34,28 +34,6 @@ interface AiAnalysisRow {
   };
   readOnly?: boolean;
   disclaimer?: string;
-}
-
-async function apiSend(
-  method: string,
-  path: string,
-  session: SessionData,
-  body?: unknown,
-): Promise<unknown> {
-  const response = await fetch(`${API_URL}${path}`, {
-    method,
-    headers: {
-      Authorization: `Bearer ${session.accessToken}`,
-      'X-Organization-Id': session.organizationId,
-      'Content-Type': 'application/json',
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const json = (await response.json()) as { data?: unknown; error?: { message?: string } };
-  if (!response.ok) {
-    throw new Error(json.error?.message ?? 'Request failed');
-  }
-  return json.data;
 }
 
 export default function IncidentDetailPage() {
@@ -115,7 +93,6 @@ export default function IncidentDetailPage() {
     setError(null);
     try {
       await apiSend('POST', `/incidents/${params.incidentId}/analyze`, session);
-      // Worker path may be async; poll briefly for results.
       for (let i = 0; i < 8; i += 1) {
         await new Promise((resolve) => setTimeout(resolve, 500));
         await refresh(session);

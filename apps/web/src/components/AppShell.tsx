@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { clearSession, loadSession } from '@/lib/api';
+import { clearSession, isDemoSession, loadSession } from '@/lib/api';
 import { useEffect, useState } from 'react';
 
 const links = [
@@ -17,6 +17,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [userLabel, setUserLabel] = useState('…');
+  const [demo, setDemo] = useState(false);
 
   useEffect(() => {
     const session = loadSession();
@@ -25,6 +26,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       return;
     }
     setUserLabel(session.userEmail);
+    setDemo(isDemoSession(session));
   }, [router]);
 
   function logout() {
@@ -38,6 +40,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="brand">
           Sentinel <span>API</span>
         </div>
+        {demo ? (
+          <div className="muted" style={{ fontSize: '0.75rem', margin: '0 0 12px' }}>
+            Portfolio demo mode
+          </div>
+        ) : null}
         <nav className="nav">
           {links.map((link) => (
             <Link
