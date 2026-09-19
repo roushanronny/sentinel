@@ -1,70 +1,35 @@
-# Free-tier live backend (portfolio)
+# Free-tier live stack (₹0)
 
 Author: **Roushan Kumar**
 
-Goal: real login + DB on the internet without paying. Redis/RabbitMQ are **optional** — Gateway/API already fall back to in-memory rate limits and sync/inline processing.
+## What is live now
 
-## Free stack we use
+| Part | Free service | Status |
+|------|--------------|--------|
+| Dashboard UI | **Vercel** | https://sentinel-chi-plum.vercel.app |
+| API (login, overview, …) | **Vercel** `/api/*` routes | Same URL |
+| Postgres | **Neon** Free | Seeded (`admin@acme.demo`) |
+| Redis | Skipped | Not required for this path |
+| RabbitMQ / workers | Skipped | AI runs **inline** on `/api/.../analyze` |
+| Gateway | Not on free live | Local / Azure later |
 
-| Need | Free option | Notes |
-|------|-------------|-------|
-| Postgres | **Neon** (or Railway Postgres on trial) | Required |
-| API process | **Railway** free trial / Hobby credits | Required |
-| Redis | Skip / **Upstash** later | Memory rate limit OK for demo |
-| RabbitMQ | Skip | AI runs **inline**; events write to DB sync |
-| Dashboard | **Vercel** (already live) | Set `NEXT_PUBLIC_API_URL` |
+## Login
 
-## One-time setup
+- URL: https://sentinel-chi-plum.vercel.app  
+- Email: `admin@acme.demo`  
+- Password: `ChangeMe-Demo-Pass1`  
 
-### 1) Neon Postgres (free)
+Hard refresh once (Cmd+Shift+R). First request after Neon sleep can take a few seconds.
 
-1. https://console.neon.tech → Sign up with GitHub  
-2. Create project `sentinel`  
-3. Copy **Connection string** (pooled OK) → `DATABASE_URL`
+## Cost
 
-### 2) Railway API (free trial credit)
+- Neon Free + Vercel Hobby = **₹0** (no card used for this setup)  
+- Do **not** add a payment method on Neon/Vercel unless you choose to upgrade later
 
-```bash
-cd ~/Desktop/sentinel
-railway login          # browser / CLI pair
-railway init           # project: sentinel
-railway add --database postgres   # OR paste Neon DATABASE_URL
-railway variables set \
-  JWT_ACCESS_SECRET="$(openssl rand -hex 32)" \
-  JWT_REFRESH_SECRET="$(openssl rand -hex 32)" \
-  AI_PROVIDER=heuristic \
-  SEED_ON_BOOT=true \
-  CORS_ORIGINS=https://sentinel-chi-plum.vercel.app \
-  NODE_ENV=production
-# If using Neon instead of Railway Postgres:
-railway variables set DATABASE_URL="postgresql://..."
-railway up
-railway domain
-```
+## Not included on this free path
 
-### 3) Point Vercel dashboard at live API
+- Separate Gateway process (real traffic proxy)  
+- Shared Redis rate limiting across many instances  
+- RabbitMQ background workers  
 
-```bash
-cd apps/web
-vercel env add NEXT_PUBLIC_API_URL production
-# value = https://YOUR-API.up.railway.app
-# Redeploy web
-```
-
-Or Vercel Dashboard → Project `sentinel` → Environment Variables → Redeploy.
-
-### 4) Verify
-
-```bash
-curl https://YOUR-API.up.railway.app/health
-# Then Sign in on https://sentinel-chi-plum.vercel.app with admin@acme.demo
-```
-
-When API is reachable, login uses **real DB** (not portfolio demo mode).
-
-## Limits (honest)
-
-- Free/trial credits sleep or run out — portfolio demo, not always-on production SLA  
-- Single-instance memory rate limits (no shared Redis)  
-- No separate gateway/workers on free tier unless you add more services  
-- Full gateway + Redis + RabbitMQ → Hobby plan or Azure (see `azure.md`)
+Those remain for local Docker Compose / Azure (see `azure.md`).
