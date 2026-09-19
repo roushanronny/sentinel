@@ -17,3 +17,4 @@ tmp/
 temp/
 .next/
 .vercel
+.env.neon

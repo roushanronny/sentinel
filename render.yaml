@@ -1,0 +1,30 @@
+# Free-tier Render blueprint (no Redis/RabbitMQ — memory/sync fallbacks)
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: sentinel-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./infrastructure/docker/Dockerfile.api
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SEED_ON_BOOT
+        value: "false"
+      - key: AI_PROVIDER
+        value: heuristic
+      - key: CORS_ORIGINS
+        value: https://sentinel-chi-plum.vercel.app,https://sentinel-roushan-kumars-projects-97d60324.vercel.app
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: REDIS_URL
+        value: redis://127.0.0.1:6379
+      - key: RABBITMQ_URL
+        value: amqp://guest:guest@127.0.0.1:5672
