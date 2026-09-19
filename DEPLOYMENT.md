@@ -59,7 +59,11 @@ Optional env on Vercel:
 
 - `NEXT_PUBLIC_API_URL` = public API URL (Azure / tunnel). Without it, login calls `http://localhost:3001`.
 
-### B) Full cloud
+### B) Free cloud (recommended for portfolio)
+
+See **[docs/deployment/free-tier.md](docs/deployment/free-tier.md)** — Neon Postgres (free) + Railway API (free trial). Redis/RabbitMQ optional (app already falls back).
+
+### C) Full cloud
 
 Follow `docs/deployment/azure.md` for API/gateway/workers + managed Postgres/Redis.
 

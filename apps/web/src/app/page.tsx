@@ -34,7 +34,7 @@ export default function LoginPage() {
         </h1>
         <p>Sign in to the API security control plane.</p>
         <p className="muted" style={{ marginTop: 0, fontSize: '0.85rem' }}>
-          Live demo works offline. Local API on :3001 is used automatically when available.
+          Live free stack: Vercel UI + Neon Postgres. Local Fastify API optional via NEXT_PUBLIC_API_URL.
         </p>
         {error ? <div className="error">{error}</div> : null}
         <div className="field">

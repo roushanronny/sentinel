@@ -10,7 +10,14 @@ import {
   saveDemoStore,
 } from './demo-data';
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
+function resolveApiUrl(): string {
+  const configured = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (configured) return configured.replace(/\/$/, '');
+  // Free Vercel path: Next.js /api/* routes + Neon Postgres
+  return '/api';
+}
+
+export const API_URL = resolveApiUrl();
 export const FORCE_DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
 export interface SessionData {

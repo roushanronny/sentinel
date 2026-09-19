@@ -18,3 +18,4 @@ temp/
 .next/
 .vercel
 .env.neon
+.env.neon.secrets
