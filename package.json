@@ -1,0 +1,47 @@
+{
+  "name": "sentinel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sentinel — AI-Powered API Security and Reliability Platform",
+  "author": "Roushan Kumar",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' --filter './apps/*' --filter './workers/*' run build",
+    "dev:api": "pnpm --filter @sentinel/api dev",
+    "dev:gateway": "pnpm --filter @sentinel/gateway dev",
+    "dev:demo": "pnpm --filter @sentinel/demo-service dev",
+    "dev:web": "pnpm --filter @sentinel/web dev",
+    "dev:worker": "pnpm --filter @sentinel/event-worker dev",
+    "dev:analytics-worker": "pnpm --filter @sentinel/analytics-worker dev",
+    "dev:ai-worker": "pnpm --filter @sentinel/ai-worker dev",
+    "demo:gateway": "bash scripts/demo-gateway.sh",
+    "ai:eval": "pnpm --filter @sentinel/ai eval",
+    "lint": "pnpm -r --if-present run lint",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "test": "pnpm -r --if-present run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "db:generate": "pnpm --filter @sentinel/database prisma:generate",
+    "db:migrate": "pnpm --filter @sentinel/database exec prisma migrate dev",
+    "db:seed": "pnpm --filter @sentinel/database prisma:seed",
+    "db:push": "pnpm --filter @sentinel/database db:push",
+    "test:security": "pnpm --filter @sentinel/api exec vitest run src/security.regression.test.ts && pnpm --filter @sentinel/gateway exec vitest run src/security.regression.test.ts",
+    "test:load:node": "node tests/load/node-harness.mjs",
+    "test:load": "k6 run tests/load/gateway.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "vitest": "^2.1.8"
+  }
+}

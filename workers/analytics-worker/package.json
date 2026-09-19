@@ -1,0 +1,25 @@
+{
+  "name": "@sentinel/analytics-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src --max-warnings=0"
+  },
+  "dependencies": {
+    "@sentinel/config": "workspace:*",
+    "@sentinel/logger": "workspace:*",
+    "@sentinel/messaging": "workspace:*",
+    "@sentinel/telemetry": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

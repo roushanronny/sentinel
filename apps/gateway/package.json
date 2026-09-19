@@ -1,0 +1,31 @@
+{
+  "name": "@sentinel/gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src --max-warnings=0"
+  },
+  "dependencies": {
+    "@sentinel/config": "workspace:*",
+    "@sentinel/database": "workspace:*",
+    "@sentinel/logger": "workspace:*",
+    "@sentinel/messaging": "workspace:*",
+    "@sentinel/redis": "workspace:*",
+    "@sentinel/security": "workspace:*",
+    "@sentinel/telemetry": "workspace:*",
+    "@sentinel/types": "workspace:*",
+    "@sentinel/utils": "workspace:*",
+    "fastify": "^5.2.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

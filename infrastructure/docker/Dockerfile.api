@@ -1,0 +1,14 @@
+# syntax=docker/dockerfile:1
+FROM node:20-bookworm-slim
+WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml tsconfig.base.json ./
+COPY packages ./packages
+COPY apps ./apps
+COPY workers ./workers
+RUN pnpm install --frozen-lockfile \
+  && pnpm --filter @sentinel/database prisma:generate \
+  && pnpm --filter @sentinel/api... build
+ENV NODE_ENV=production
+EXPOSE 3001
+CMD ["pnpm", "--filter", "@sentinel/api", "start"]
