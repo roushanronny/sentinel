@@ -7,8 +7,9 @@ COPY packages ./packages
 COPY apps ./apps
 COPY workers ./workers
 RUN pnpm install --frozen-lockfile \
-  && pnpm --filter @sentinel/database prisma:generate \
-  && pnpm --filter @sentinel/api... build
+    && pnpm --filter @sentinel/database prisma:generate \
+    && pnpm --filter @sentinel/api... build
 ENV NODE_ENV=production
 EXPOSE 3001
-CMD ["pnpm", "--filter", "@sentinel/api", "start"]
+# Migrate + optional seed, then start API (Redis/RabbitMQ optional — memory/sync fallbacks exist)
+CMD ["sh", "-c", "pnpm --filter @sentinel/database exec prisma migrate deploy && ( [ \"$SEED_ON_BOOT\" = \"true\" ] && pnpm --filter @sentinel/database prisma:seed || true ) && pnpm --filter @sentinel/api start"]

@@ -25,7 +25,12 @@ const envSchema = z.object({
 export type Env = z.infer<typeof envSchema>;
 
 export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
-  const parsed = envSchema.safeParse(source);
+  // Railway/Render/Fly set PORT; map it onto API_PORT when unset.
+  const normalized = { ...source };
+  if (!normalized.API_PORT && normalized.PORT) {
+    normalized.API_PORT = normalized.PORT;
+  }
+  const parsed = envSchema.safeParse(normalized);
   if (!parsed.success) {
     const message = parsed.error.issues
       .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
