@@ -16,3 +16,4 @@ packages/**/.env
 tmp/
 temp/
 .next/
+.vercel

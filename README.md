@@ -18,7 +18,13 @@ Modern products expose many APIs (`/login`, `/payments`, `/users`), but teams of
 - Correlated logs, traces, and metrics for incidents
 - A safe way to analyze security events without leaking secrets
 
-## Demo
+## Live
+
+- **GitHub:** https://github.com/roushanronny/sentinel
+- **Dashboard:** https://sentinel-chi-plum.vercel.app
+- Deployment notes: [DEPLOYMENT.md](DEPLOYMENT.md)
+
+## Demo (local)
 
 ```bash
 cp .env.example .env
@@ -35,7 +41,7 @@ pnpm dev:ai-worker
 pnpm dev:web                 # :3003
 ```
 
-- Dashboard: http://localhost:3003
+- Dashboard: http://localhost:3003 (live: https://sentinel-chi-plum.vercel.app)
 - Login: `admin@acme.demo` / `ChangeMe-Demo-Pass1`
 - Gateway demo: `pnpm demo:gateway`
 - AI eval: `pnpm ai:eval`
